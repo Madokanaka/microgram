@@ -7,6 +7,7 @@ import org.attractor.microgram.exception.RegisterException;
 import org.attractor.microgram.model.Role;
 import org.attractor.microgram.repository.UserRepository;
 import org.attractor.microgram.service.RoleService;
+import org.attractor.microgram.service.SubscriptionService;
 import org.attractor.microgram.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.attractor.microgram.model.User;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +25,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleService roleService;
+    private final SubscriptionService subscriptionService;
 
     @Transactional
     @Override
@@ -55,5 +58,25 @@ public class UserServiceImpl implements UserService {
         log.info("User registered: {}", user.getEmail());
     }
 
+    @Override
+    public List<UserDto> searchUsers(String query) {
+        log.info("Searching users with query: {}", query);
+        List<User> users = userRepository.findByUsernameContainingIgnoreCaseOrEmailContainingIgnoreCaseOrNameContainingIgnoreCase(query, query, query);
+        return users.stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
 
+    private UserDto mapToDto(User user) {
+        return UserDto.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .name(user.getName())
+                .avatar(user.getAvatar())
+                .bio(user.getBio())
+                .followersCount(subscriptionService.getSubscribersCount(user.getId()))
+                .followingCount(subscriptionService.getSubscriptionCount(user.getId()))
+                .build();
+    }
 }

@@ -11,6 +11,7 @@ import jakarta.validation.constraints.Size;
 @AllArgsConstructor
 @Builder
 public class UserDto {
+    private Long id;
     @NotBlank(message = "Username cannot be empty")
     @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
     private String username;
@@ -28,4 +29,9 @@ public class UserDto {
 
     @Size(max = 255, message = "Bio cannot exceed 255 characters")
     private String bio;
+
+    private String avatar;
+
+    private int followersCount;
+    private int followingCount;
 }

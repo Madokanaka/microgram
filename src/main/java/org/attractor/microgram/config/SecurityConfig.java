@@ -35,12 +35,12 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/auth/login", "/auth/register", "/user/**", "/search").permitAll()
+                        .requestMatchers("/auth/login", "/auth/register", "/user/**", "/search", "/api/search", "/js/**", "/css/**", "/images/**").permitAll()
                         .requestMatchers("/post/**").hasAuthority("USER")
                         .requestMatchers("/comment/**").hasAuthority("USER")
                         .requestMatchers("/like/**").hasAuthority("USER")
                         .requestMatchers("/follow/**").hasAuthority("USER")
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers("/auth/login", "/auth/register", "/logout")

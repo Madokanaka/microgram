@@ -9,5 +9,7 @@ import java.util.Optional;
 public interface SubscriptionRepository extends JpaRepository<Subscription, Long> {
     Optional<Subscription> findByFollowerIdAndFollowedId(Long followerId, Long followedId);
     List<Subscription> findByFollowerId(Long followerId);
+    int countByFollowedId(Long followedId);
+    int countByFollowerId(Long followerId);
     void deleteByFollowerIdAndFollowedId(Long followerId, Long followedId);
 }

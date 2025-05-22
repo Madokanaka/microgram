@@ -1,0 +1,56 @@
+server:
+  port: 8080
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        generate_statistics: false
+        format_sql: true
+    show-sql: true
+
+  application:
+    name: "microgram"
+  mvc:
+    static-path-pattern: /static/**
+    hidden-method:
+      filter:
+        enabled: true
+  freemarker:
+    expose-request-attributes: true
+  datasource:
+    url: jdbc:h2:./db/microgram;AUTO_SERVER=TRUE
+    username: root
+    password: qwerty
+    driver-class-name: org.h2.Driver
+  liquibase:
+    change-log: classpath:/db/changelog/master.yml
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+logging:
+  level:
+    root: error
+    org:
+      hibernate:
+        type: error
+        stat: error
+      springframework:
+        security: debug
+        web: debug
+        messaging: debug
+      attractor:
+        quiz_platform: debug
+    web: info
+    sql: error
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs

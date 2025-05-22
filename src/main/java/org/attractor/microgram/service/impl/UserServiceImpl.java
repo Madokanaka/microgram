@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.attractor.microgram.dto.UserDto;
 import org.attractor.microgram.exception.RegisterException;
+import org.attractor.microgram.exception.UserNotFoundException;
 import org.attractor.microgram.model.Role;
 import org.attractor.microgram.repository.UserRepository;
 import org.attractor.microgram.service.RoleService;
@@ -78,5 +79,20 @@ public class UserServiceImpl implements UserService {
                 .followersCount(subscriptionService.getSubscribersCount(user.getId()))
                 .followingCount(subscriptionService.getSubscriptionCount(user.getId()))
                 .build();
+    }
+
+    @Override
+    public UserDto getUserByName(String name) {
+        User user = userRepository.findByUsername(name).orElseThrow(() -> new UserNotFoundException("User not found: " + name));
+
+        return mapToDto(user);
+    }
+
+    @Override
+    public void saveAvatar(Long userId, String fileName) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found: " + userId));
+        user.setAvatar(fileName);
+        userRepository.save(user);
     }
 }

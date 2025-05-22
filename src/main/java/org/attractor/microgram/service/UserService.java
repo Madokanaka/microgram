@@ -10,4 +10,8 @@ public interface UserService {
     void registerUser(UserDto userDto);
 
     List<UserDto> searchUsers(String query);
+
+    UserDto getUserByName(String name);
+
+    void saveAvatar(Long userId, String fileName);
 }

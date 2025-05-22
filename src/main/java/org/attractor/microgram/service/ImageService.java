@@ -5,6 +5,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface ImageService {
     String savePostImage(MultipartFile file, Long userId);
-    String saveAvatar(MultipartFile file, Long userId);
-    ResponseEntity<?> getImage(String fileName);
+
+    ResponseEntity<?> findByName(String fileName);
+
+    void uploadImage(org.springframework.security.core.userdetails.User principal, MultipartFile file);
 }

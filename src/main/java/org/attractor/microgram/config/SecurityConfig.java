@@ -21,11 +21,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .formLogin(form -> form
                         .loginPage("/auth/login")
                         .loginProcessingUrl("/auth/login")
-                        .defaultSuccessUrl("/home", true)
+                        .defaultSuccessUrl("/profile"  , true)
                         .failureUrl("/auth/login?error=true")
                         .permitAll()
                 )
@@ -40,6 +40,7 @@ public class SecurityConfig {
                         .requestMatchers("/comment/**").hasAuthority("USER")
                         .requestMatchers("/like/**").hasAuthority("USER")
                         .requestMatchers("/follow/**").hasAuthority("USER")
+                        .requestMatchers("/profile").hasAuthority("USER")
                         .anyRequest().permitAll()
                 )
                 .csrf(csrf -> csrf

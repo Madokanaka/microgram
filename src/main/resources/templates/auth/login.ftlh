@@ -24,10 +24,6 @@
                     </div>
                     <button type="submit" class="btn btn-primary w-100 mb-3">Log In</button>
                 </form>
-                <p class="text-center mb-3">OR</p>
-                <button class="btn btn-outline-primary w-100 mb-3" style="background-color: #1877f2; color: white; border: none;">
-                    <i class="bi bi-facebook me-2"></i> Log in with Facebook
-                </button>
                 <p class="text-muted small mb-3">Forgot password?</p>
             </div>
         </div>

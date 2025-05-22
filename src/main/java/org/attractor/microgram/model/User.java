@@ -49,6 +49,9 @@ public class User {
     )
     private Collection<Role> roles;
 
+    @Column(nullable = false)
+    private Boolean enabled = true;
+
     public void addRole(Role role) {
         this.roles.add(role);
         role.getUsers().add(this);

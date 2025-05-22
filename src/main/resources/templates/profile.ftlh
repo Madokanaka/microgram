@@ -9,7 +9,7 @@
         <div class="container py-4">
             <div class="row align-items-center">
                 <div class="col-4 col-md-3 text-center">
-                    <img src="${user.avatar! 'https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-600nw-2281862025.jpg'}" alt="${user.username}'s avatar"
+                    <img src="<#if user.avatar?? && user.avatar != ''>/api/images/${user.avatar}<#else>https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-600nw-2281862025.jpg</#if>" alt="${user.username}'s avatar"
                          class="rounded-circle"
                          style="width: 120px; height: 120px; object-fit: cover; border: 2px solid #e6e6e6;">
                 </div>
@@ -20,6 +20,9 @@
                             <button class="btn btn-primary btn-sm me-2"
                                     style="background-color: #0095f6; border: none; font-weight: 600;">Подписаться
                             </button>
+                        </#if>
+                        <#if known && name == user.username>
+                            <a href="/user/edit" class="btn btn-outline-secondary btn-sm me-2" style="border-color: #dbdbdb; color: #ffffff; font-weight: 600;">Edit Profile</a>
                         </#if>
                     </div>
                     <div class="d-flex mb-3">
@@ -41,14 +44,6 @@
                     <li class="nav-item">
                         <a class="nav-link active border-0 text-center" style="color: #262626; font-size: 0.85rem;"
                            href="#posts"><i class="bi bi-grid-3x3 me-1"></i> ПУБЛИКАЦИИ</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link border-0 text-center" style="color: #8e8e8e; font-size: 0.85rem;"
-                           href="#followers"><i class="bi bi-person-check me-1"></i> ПОДПИСЧИКИ</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link border-0 text-center" style="color: #8e8e8e; font-size: 0.85rem;"
-                           href="#following"><i class="bi bi-person-plus me-1"></i> ПОДПИСКИ</a>
                     </li>
                 </ul>
             </div>

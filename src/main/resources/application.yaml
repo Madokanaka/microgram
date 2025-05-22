@@ -1,5 +1,7 @@
 server:
   port: 8080
+  tomcat:
+    max-swallow-size: -1
 spring:
   h2:
     console:
@@ -30,6 +32,11 @@ spring:
     driver-class-name: org.h2.Driver
   liquibase:
     change-log: classpath:/db/changelog/master.yml
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+      resolve-lazily: false
 management:
   endpoints:
     web:

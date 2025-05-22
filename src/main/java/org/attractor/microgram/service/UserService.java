@@ -14,4 +14,6 @@ public interface UserService {
     UserDto getUserByName(String name);
 
     void saveAvatar(Long userId, String fileName);
+
+    void updateUser(UserDto userDto);
 }

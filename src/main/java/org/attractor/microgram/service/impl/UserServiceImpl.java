@@ -95,4 +95,13 @@ public class UserServiceImpl implements UserService {
         user.setAvatar(fileName);
         userRepository.save(user);
     }
+
+    @Override
+    public void updateUser(UserDto userDto) {
+    	User user = userRepository.findById(userDto.getId())
+    			.orElseThrow(() -> new UserNotFoundException("User not found: " + userDto.getId()));
+
+    	user.setBio(userDto.getBio());
+        userRepository.save(user);
+    }
 }

@@ -40,7 +40,7 @@ public class SecurityConfig {
                         .requestMatchers("/comment/**").hasAuthority("USER")
                         .requestMatchers("/like/**").hasAuthority("USER")
                         .requestMatchers("/follow/**").hasAuthority("USER")
-                        .requestMatchers("/profile").hasAuthority("USER")
+                        .requestMatchers("/profile/**").hasAuthority("USER")
                         .anyRequest().permitAll()
                 )
                 .csrf(csrf -> csrf

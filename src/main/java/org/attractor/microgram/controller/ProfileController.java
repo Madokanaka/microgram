@@ -60,6 +60,30 @@ public class ProfileController {
 
             imageService.uploadImage(principal, file);
         }
-        return "redirect:/profile/username";
+        return "redirect:/profile";
+    }
+
+    @GetMapping("/user/edit")
+    public String showEditProfile(@AuthenticationPrincipal User principal, Model model) {
+        UserDto user = userService.getUserByName(principal.getUsername());
+        model.addAttribute("user", user);
+        return "edit-profile";
+    }
+
+    @PostMapping("/user/edit")
+    public String updateProfile(@AuthenticationPrincipal User principal,
+                                @RequestParam(value = "bio", required = false) String bio,
+                                Model model) {
+        if (principal != null) {
+            UserDto user = userService.getUserByName(principal.getUsername());
+            if (bio != null) {
+                user.setBio(bio);
+                userService.updateUser(user);
+            }
+            return "redirect:/profile";
+        } else {
+            model.addAttribute("error", "You can only edit your own profile.");
+            return "edit-profile";
+        }
     }
 }

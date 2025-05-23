@@ -20,4 +20,6 @@ public interface PostService {
     void deletePost(Long id);
 
     void save(Post post);
+
+    List<PostDto> getFeedPosts(String username);
 }

@@ -33,8 +33,11 @@ document.addEventListener('DOMContentLoaded', function () {
                         item.className = 'list-group-item bg-dark text-white border-secondary p-3 d-flex align-items-center text-decoration-none';
 
                         const avatar = document.createElement('img');
-                        avatar.src = user.avatar || 'https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-600nw-2281862025.jpg';
-                        avatar.className = 'rounded-circle me-3';
+                        if (user.avatar && user.avatar.trim() !== '') {
+                            avatar.src = `/api/images/${user.avatar}`;
+                        } else {
+                            avatar.src = 'https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-600nw-2281862025.jpg';
+                        }                        avatar.className = 'rounded-circle me-3';
                         avatar.style.width = '44px';
                         avatar.style.height = '44px';
                         avatar.style.objectFit = 'cover';
@@ -57,7 +60,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         username.appendChild(usernameSpan);
                         username.appendChild(nameSpan);
 
-                        // Stats
                         const stats = document.createElement('div');
                         stats.className = 'small text-muted';
 
@@ -79,16 +81,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         item.appendChild(avatar);
                         item.appendChild(userInfo);
 
-                        // Follow button
-                        const button = document.createElement('div');
-                        button.className = 'ms-3';
-
-                        const followBtn = document.createElement('button');
-                        followBtn.className = 'btn btn-outline-primary btn-sm';
-                        followBtn.textContent = 'Подписаться';
-
-                        button.appendChild(followBtn);
-                        item.appendChild(button);
 
                         list.appendChild(item);
                     });

@@ -17,9 +17,12 @@
                     <div class="d-flex align-items-center mb-2">
                         <h1 class="fs-4 fw-light mb-0 me-3">${user.username}</h1>
                         <#if known && name != user.username>
-                            <button class="btn btn-primary btn-sm me-2"
-                                    style="background-color: #0095f6; border: none; font-weight: 600;">Подписаться
-                            </button>
+                            <form action="/user/${user.username}/subscribe" method="post" class="d-inline">
+                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                <button type="submit" class="btn btn-primary btn-sm<#if isSubscribed> btn-danger</#if>" style="background-color: <#if isSubscribed>#dc3545<#else>#0095f6</#if>; border: none;">
+                                    <#if isSubscribed>Unfollow<#else>Follow</#if>
+                                </button>
+                            </form>
                         </#if>
                         <#if known && name == user.username>
                             <a href="/user/edit" class="btn btn-outline-secondary btn-sm me-2" style="border-color: #dbdbdb; color: #ffffff; font-weight: 600;">Edit Profile</a>

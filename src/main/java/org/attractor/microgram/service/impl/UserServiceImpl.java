@@ -8,7 +8,6 @@ import org.attractor.microgram.exception.UserNotFoundException;
 import org.attractor.microgram.model.Role;
 import org.attractor.microgram.repository.UserRepository;
 import org.attractor.microgram.service.RoleService;
-import org.attractor.microgram.service.SubscriptionService;
 import org.attractor.microgram.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,7 +25,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleService roleService;
-    private final SubscriptionService subscriptionService;
+    private final SubscriptionCountService subscriptionService;
 
     @Transactional
     @Override

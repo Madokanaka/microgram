@@ -11,6 +11,7 @@ import org.attractor.microgram.service.PostService;
 import org.attractor.microgram.service.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.attractor.microgram.service.SubscriptionService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,6 +23,7 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final UserService userService;
+    private final SubscriptionService subscriptionService;
 
     @Override
     public List<PostDto> getPostsByUserId(Long userId) {
@@ -91,5 +93,15 @@ public class PostServiceImpl implements PostService {
     @Override
     public void save(Post post) {
         postRepository.save(post);
+    }
+
+    @Override
+    public List<PostDto> getFeedPosts(String username) {
+        log.info("Fetching feed posts for user: {}", username);
+        List<Long> followedUserIds = subscriptionService.getFollowedUserIds(username);
+
+        return postRepository.findByUserIdInOrderByCreatedAtDesc(followedUserIds).stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
     }
 }

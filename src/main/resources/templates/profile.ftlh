@@ -52,7 +52,7 @@
                 <#list posts as post>
                     <div class="col">
                         <a href="/post/${post.id}" class="d-block position-relative">
-                            <img src="${post.imageUrl! '/default-image.png'}" class="w-100" alt="Post image"
+                            <img src="/api/posts/${post.imageUrl}" class="w-100" alt="Post image"
                                  style="aspect-ratio: 1/1; object-fit: cover;">
                             <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center text-white bg-black bg-opacity-50 opacity-0 hover-opacity-100"
                                  style="transition: opacity 0.3s;">

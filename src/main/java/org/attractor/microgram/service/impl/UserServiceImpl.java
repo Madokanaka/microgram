@@ -89,6 +89,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUserByNameModel(String name) {
+        User user = userRepository.findByUsername(name).orElseThrow(() -> new UserNotFoundException("User not found: " + name));
+
+        return user;
+    }
+
+    @Override
     public void saveAvatar(Long userId, String fileName) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found: " + userId));

@@ -9,14 +9,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/images")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class ImageController {
     private final ImageService imageService;
 
-    @GetMapping({"{imageName}"})
+    @GetMapping({"/images/{imageName}"})
     public ResponseEntity<?> getImage(@PathVariable("imageName") String imageName) {
-        return imageService.findByName(imageName);
+        return imageService.findByName(imageName, "images/");
+    }
+
+    @GetMapping({"/posts/{imageName}"})
+    public ResponseEntity<?> getImageForPost(@PathVariable("imageName") String imageName) {
+        var im = imageService.findByName(imageName, "posts/");
+        return imageService.findByName(imageName, "posts/");
     }
 
 

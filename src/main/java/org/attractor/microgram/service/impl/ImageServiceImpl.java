@@ -27,9 +27,9 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public ResponseEntity<?> findByName(String fileName) {
+    public ResponseEntity<?> findByName(String fileName, String directory) {
         log.info("Fetching image by fileName={}", fileName);
-        return fileUtil.getOutputFile(fileName, "images/", MediaType.IMAGE_JPEG);
+        return fileUtil.getOutputFile(fileName, directory, MediaType.IMAGE_JPEG);
     }
 
     @Override

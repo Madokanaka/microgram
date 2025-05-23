@@ -47,7 +47,8 @@
                             <a href="/user/${comment.username}" class="text-white text-decoration-none">
                                 <div class="d-flex align-items-start mb-3 justify-content-between">
                                     <div class="d-flex align-items-start">
-                                        <img src="<#if comment.avatar?? && comment.avatar != ''>/api/images/${comment.avatar}<#else>https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-600nw-2281862025.jpg</#if>"                                             alt="${comment.username}'s avatar"
+                                        <img src="<#if comment.avatar?? && comment.avatar != ''>/api/images/${comment.avatar}<#else>https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-600nw-2281862025.jpg</#if>"
+                                             alt="${comment.username}'s avatar"
                                              class="rounded-circle me-2"
                                              style="width: 32px; height: 32px; object-fit: cover;">
                                         <div>
@@ -74,18 +75,20 @@
 
                 <div class="p-3 border-top border-secondary">
                     <div class="d-flex justify-content-between mb-2">
-                        <span><i class="bi bi-heart me-1"></i> ${post.likesCount}</span>
+                        <#if known>
+                            <form action="/post/${post.id}/like" method="post" class="d-inline">
+                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                <button type="submit" class="btn btn-outline-secondary btn-sm me-2"
+                                        style="border: none;">
+                                    <i class="bi bi-heart<#if hasLiked>-fill text-danger</#if>"> ${post.likesCount}</i>
+                                </button>
+                            </form>
+                        <#else>
+                            <span><i class="bi bi-heart me-1"></i> ${post.likesCount}</span>
+                        </#if>
                         <span><i class="bi bi-chat me-1"></i> ${post.commentsCount}</span>
                     </div>
-                    <#if known>
-                        <button class="btn btn-outline-secondary btn-sm me-2"
-                                style="border-color: #dbdbdb; color: #ffffff;">
-                            <i class="bi bi-heart"></i>
-                        </button>
-                        <button class="btn btn-outline-secondary btn-sm" style="border-color: #dbdbdb; color: #ffffff;">
-                            <i class="bi bi-chat"></i>
-                        </button>
-                    </#if>
+
                 </div>
 
                 <#if known>

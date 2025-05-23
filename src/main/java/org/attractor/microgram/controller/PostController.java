@@ -7,6 +7,7 @@ import org.attractor.microgram.dto.PostDto;
 import org.attractor.microgram.dto.UserDto;
 import org.attractor.microgram.service.CommentService;
 import org.attractor.microgram.service.ImageService;
+import org.attractor.microgram.service.LikeService;
 import org.attractor.microgram.service.PostService;
 import org.attractor.microgram.service.UserService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,6 +27,7 @@ public class PostController {
     private final PostService postService;
     private final ImageService imageService;
     private final CommentService commentService;
+    private final LikeService likeService;
 
     @GetMapping("/create")
     public String showCreatePost(@AuthenticationPrincipal User principal, Model model) {
@@ -63,10 +65,12 @@ public class PostController {
         log.info("Viewing post with id: {}", id);
         PostDto post = postService.getPostById(id);
         UserDto user = userService.getUserByName(post.getUsername());
+        boolean hasLiked = principal != null && likeService.hasLiked(id, principal.getUsername());
         model.addAttribute("post", post);
         model.addAttribute("user", user);
         model.addAttribute("isAuthenticated", principal != null);
         model.addAttribute("comments", commentService.getCommentsByPostId(id));
+        model.addAttribute("hasLiked", hasLiked);
         return "posts/post";
     }
 
@@ -77,15 +81,11 @@ public class PostController {
 
         if (!post.getUsername().equals(principal.getUsername())) {
             log.warn("User {} attempted to delete post {} that they do not own", principal.getUsername(), id);
-            model.addAttribute("error", "You can only delete your own posts.");
-            UserDto user = userService.getUserByName(post.getUsername());
-            model.addAttribute("post", post);
-            model.addAttribute("user", user);
-            model.addAttribute("isAuthenticated", true);
-            model.addAttribute("comments", commentService.getCommentsByPostId(id));
-            return "posts/post";
+
+            return "redirect:/post" + id;
         }
         commentService.deleteCommentsByPostId(id);
+        likeService.deleteLikesByPostId(id);
         postService.deletePost(id);
         log.info("Post with id: {} deleted successfully by user: {}", id, principal.getUsername());
         return "redirect:/profile";
@@ -122,5 +122,12 @@ public class PostController {
         commentService.deleteComment(id);
         log.info("Comment with id: {} deleted successfully by user: {}", id, principal.getUsername());
         return "redirect:/post/" + comment.getPostId();
+    }
+
+    @PostMapping("/{id}/like")
+    public String toggleLike(@PathVariable Long id, @AuthenticationPrincipal User principal) {
+        log.info("Toggling like for post with id: {} by user: {}", id, principal.getUsername());
+        likeService.toggleLike(id, principal.getUsername());
+        return "redirect:/post/" + id;
     }
 }

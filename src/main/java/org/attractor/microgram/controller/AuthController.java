@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
@@ -21,7 +22,15 @@ public class AuthController {
     private final UserService userService;
 
     @GetMapping("/auth/login")
-    public String showLoginForm(Model model) {
+    public String showLoginForm(@RequestParam(required = false) String error,
+                                @RequestParam(required = false) String logout,
+                                Model model) {
+        if (error != null) {
+            model.addAttribute("error", true);
+        }
+        if (logout != null) {
+            model.addAttribute("logout", true);
+        }
         model.addAttribute("userDto", new UserDto());
         return "auth/login";
     }

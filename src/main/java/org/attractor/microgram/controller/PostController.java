@@ -16,9 +16,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import java.util.List;
 
 @Controller
-@RequestMapping("/post")
+@RequestMapping()
 @RequiredArgsConstructor
 @Slf4j
 public class PostController {
@@ -29,7 +30,7 @@ public class PostController {
     private final CommentService commentService;
     private final LikeService likeService;
 
-    @GetMapping("/create")
+    @GetMapping("/post/create")
     public String showCreatePost(@AuthenticationPrincipal User principal, Model model) {
         log.info("Showing create post form for user: {}", principal.getUsername());
         UserDto user = userService.getUserByName(principal.getUsername());
@@ -37,7 +38,7 @@ public class PostController {
         return "posts/create-post";
     }
 
-    @PostMapping("/create")
+    @PostMapping("/post/create")
     public String createPost(@AuthenticationPrincipal User principal,
                             @RequestParam("image") MultipartFile image,
                             @RequestParam("description") String description,
@@ -60,7 +61,7 @@ public class PostController {
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/post/{id}")
     public String viewPost(@PathVariable Long id, Model model, @AuthenticationPrincipal User principal) {
         log.info("Viewing post with id: {}", id);
         PostDto post = postService.getPostById(id);
@@ -74,7 +75,7 @@ public class PostController {
         return "posts/post";
     }
 
-    @PostMapping("/{id}/delete")
+    @PostMapping("/post/{id}/delete")
     public String deletePost(@PathVariable Long id, @AuthenticationPrincipal User principal, Model model) {
         log.info("Attempting to delete post with id: {} by user: {}", id, principal.getUsername());
         PostDto post = postService.getPostById(id);
@@ -91,7 +92,7 @@ public class PostController {
         return "redirect:/profile";
     }
 
-    @PostMapping("/{id}/comment")
+    @PostMapping("/post/{id}/comment")
     public String addComment(@PathVariable Long id, @RequestParam("comment") String content,
                              @AuthenticationPrincipal User principal, Model model) {
         log.info("Adding comment to post with id: {} by user: {}", id, principal.getUsername());
@@ -99,7 +100,7 @@ public class PostController {
         return "redirect:/post/" + id;
     }
 
-    @PostMapping("/comment/{id}/delete")
+    @PostMapping("/post/comment/{id}/delete")
     public String deleteComment(@PathVariable Long id, @AuthenticationPrincipal User principal, Model model) {
         log.info("Attempting to delete comment with id: {} by user: {}", id, principal.getUsername());
         CommentDto comment = commentService.getCommentsByPostId(id).stream()
@@ -124,10 +125,21 @@ public class PostController {
         return "redirect:/post/" + comment.getPostId();
     }
 
-    @PostMapping("/{id}/like")
+    @PostMapping("/post/{id}/like")
     public String toggleLike(@PathVariable Long id, @AuthenticationPrincipal User principal) {
         log.info("Toggling like for post with id: {} by user: {}", id, principal.getUsername());
         likeService.toggleLike(id, principal.getUsername());
         return "redirect:/post/" + id;
+    }
+
+    @GetMapping("/home")
+    public String showFeed(@AuthenticationPrincipal User principal, Model model) {
+        if (principal == null) {
+            return "redirect:/auth/login";
+        }
+        log.info("Showing feed for user: {}", principal.getUsername());
+        List<PostDto> feedPosts = postService.getFeedPosts(principal.getUsername());
+        model.addAttribute("posts", feedPosts);
+        return "posts/feed";
     }
 }

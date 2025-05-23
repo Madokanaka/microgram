@@ -40,6 +40,7 @@ public class SecurityConfig {
                         .requestMatchers("/like/**").hasAuthority("USER")
                         .requestMatchers("/follow/**").hasAuthority("USER")
                         .requestMatchers("/profile/**").hasAuthority("USER")
+                        .requestMatchers("/home").hasAuthority("USER")
                         .anyRequest().permitAll()
                 )
                 .csrf(csrf -> csrf

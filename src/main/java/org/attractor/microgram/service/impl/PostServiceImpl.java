@@ -7,7 +7,6 @@ import org.attractor.microgram.exception.ResourceNotFoundException;
 import org.attractor.microgram.model.Post;
 import org.attractor.microgram.model.User;
 import org.attractor.microgram.repository.PostRepository;
-import org.attractor.microgram.service.CommentService;
 import org.attractor.microgram.service.PostService;
 import org.attractor.microgram.service.UserService;
 import org.springframework.stereotype.Service;
@@ -23,7 +22,6 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final UserService userService;
-    private final CommentService commentService;
 
     @Override
     public List<PostDto> getPostsByUserId(Long userId) {
@@ -72,15 +70,26 @@ public class PostServiceImpl implements PostService {
         return mapToDto(post);
     }
 
+    @Override
+    public Post getPostByIdModel(Long postId) {
+        log.info("Getting post by id: {}", postId);
+        Post post = postRepository.findById(postId).orElseThrow(() -> new ResourceNotFoundException("Post not found: " + postId));
+        log.info("Post found: {}", post);
+        return post;
+    }
+
     @Transactional
     @Override
     public void deletePost(Long id) {
         log.info("Deleting post with id: {}", id);
-        commentService.deleteCommentsByPostId(id);
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
         postRepository.delete(post);
         log.info("Post with id: {} deleted successfully", id);
     }
 
+    @Override
+    public void save(Post post) {
+        postRepository.save(post);
+    }
 }

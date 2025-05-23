@@ -39,22 +39,26 @@
                     </div>
 
                     <div class="comments-list">
-                        <div class="d-flex align-items-start mb-3">
-                            <img src="https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-600nw-2281862025.jpg" alt="User avatar" class="rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover;">
-                            <div>
-                                <strong class="text-white">user1</strong>
-                                <p class="text-white mb-0">Great photo!</p>
-                                <small class="text-muted">2h ago</small>
+                        <#list comments as comment>
+                            <div class="d-flex align-items-start mb-3 justify-content-between">
+                                <div class="d-flex align-items-start">
+                                    <img src="https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-600nw-2281862025.jpg" alt="${comment.username}'s avatar" class="rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover;">
+                                    <div>
+                                        <strong class="text-white">${comment.username}</strong>
+                                        <p class="text-white mb-0">${comment.text}</p>
+                                        <small class="text-muted">${comment.createdAt.toLocalDate()}</small>
+                                    </div>
+                                </div>
+                                <#if known && name == user.username>
+                                    <form action="/post/comment/${comment.id}/delete" method="post">
+                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                        <button type="submit" class="btn btn-outline-danger btn-sm" style="border: none;">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </#if>
                             </div>
-                        </div>
-                        <div class="d-flex align-items-start mb-3">
-                            <img src="https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-600nw-2281862025.jpg" alt="User avatar" class="rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover;">
-                            <div>
-                                <strong class="text-white">user2</strong>
-                                <p class="text-white mb-0">Amazing moment!</p>
-                                <small class="text-muted">1h ago</small>
-                            </div>
-                        </div>
+                        </#list>
                     </div>
                 </div>
 

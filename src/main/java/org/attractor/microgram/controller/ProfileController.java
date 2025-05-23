@@ -105,4 +105,5 @@ public class ProfileController {
         }
         return "redirect:/user/" + username;
     }
+
 }

@@ -41,6 +41,7 @@ public class SecurityConfig {
                         .requestMatchers("/follow/**").hasAuthority("USER")
                         .requestMatchers("/profile/**").hasAuthority("USER")
                         .requestMatchers("/home").hasAuthority("USER")
+                        .requestMatchers("/").hasAuthority("USER")
                         .anyRequest().permitAll()
                 )
                 .csrf(csrf -> csrf

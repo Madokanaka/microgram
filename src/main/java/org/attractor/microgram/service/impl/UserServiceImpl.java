@@ -96,18 +96,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void saveAvatar(Long userId, String fileName) {
+        log.info("Saving avatar for user with id: {} to file: {}", userId, fileName);
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found: " + userId));
         user.setAvatar(fileName);
         userRepository.save(user);
+        log.info("Avatar saved for user with id: {} to file: {}", userId, fileName);
     }
 
     @Override
     public void updateUser(UserDto userDto) {
+        log.info("Updating user: {}", userDto.getId());
     	User user = userRepository.findById(userDto.getId())
     			.orElseThrow(() -> new UserNotFoundException("User not found: " + userDto.getId()));
 
     	user.setBio(userDto.getBio());
         userRepository.save(user);
+        log.info("User updated: {}", userDto.getId());
     }
 }

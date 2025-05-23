@@ -58,4 +58,8 @@ public class AuthController {
             return "auth/registration";
         }
     }
+    @GetMapping("/")
+    public String home() {
+        return "redirect:/home";
+    }
 }

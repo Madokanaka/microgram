@@ -12,4 +12,7 @@ public interface PostService {
     void createPost(String userName, PostDto postDto);
 
     PostDto getPostById(Long postId);
+
+    @Transactional
+    void deletePost(Long id);
 }

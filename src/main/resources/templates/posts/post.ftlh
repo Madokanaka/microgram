@@ -18,6 +18,14 @@
                     <img src="<#if user.avatar?? && user.avatar != ''>/api/images/${user.avatar}<#else>https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-600nw-2281862025.jpg</#if>" alt="${user.username}'s avatar"
                          class="rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover; border: 1px solid #e6e6e6;">
                     <a href="/user/${user.username}" class="text-white text-decoration-none">${user.username}</a>
+                    <#if known && name == user.username>
+                        <form action="/post/${post.id}/delete" method="post">
+                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                            <button type="submit" class="btn btn-outline-danger btn-sm" style="border: none;">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
+                    </#if>
                 </div>
 
                 <div class="p-3 flex-grow-1" style="overflow-y: auto;">

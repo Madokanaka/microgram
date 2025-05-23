@@ -2,7 +2,6 @@ package org.attractor.microgram.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.attractor.microgram.model.User;
 import org.attractor.microgram.service.ImageService;
 import org.attractor.microgram.service.UserService;
 import org.attractor.microgram.util.FileUtil;

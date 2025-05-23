@@ -65,4 +65,24 @@ public class PostController {
         model.addAttribute("isAuthenticated", principal != null);
         return "posts/post";
     }
+
+    @PostMapping("/{id}/delete")
+    public String deletePost(@PathVariable Long id, @AuthenticationPrincipal User principal, Model model) {
+        log.info("Attempting to delete post with id: {} by user: {}", id, principal.getUsername());
+        PostDto post = postService.getPostById(id);
+
+        if (!post.getUsername().equals(principal.getUsername())) {
+            log.warn("User {} attempted to delete post {} that they do not own", principal.getUsername(), id);
+            model.addAttribute("error", "You can only delete your own posts.");
+            UserDto user = userService.getUserByName(post.getUsername());
+            model.addAttribute("post", post);
+            model.addAttribute("user", user);
+            model.addAttribute("isAuthenticated", true);
+            return "posts/post";
+        }
+
+        postService.deletePost(id);
+        log.info("Post with id: {} deleted successfully by user: {}", id, principal.getUsername());
+        return "redirect:/profile";
+    }
 }

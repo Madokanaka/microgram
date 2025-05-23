@@ -3,6 +3,7 @@ package org.attractor.microgram.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.attractor.microgram.dto.PostDto;
+import org.attractor.microgram.exception.ResourceNotFoundException;
 import org.attractor.microgram.model.Post;
 import org.attractor.microgram.model.User;
 import org.attractor.microgram.repository.PostRepository;
@@ -59,5 +60,13 @@ public class PostServiceImpl implements PostService {
 
         postRepository.save(post);
         log.info("Post created for user: {}", userName);
+    }
+
+    @Override
+    public PostDto getPostById(Long postId) {
+        log.info("Getting post by id: {}", postId);
+        Post post = postRepository.findById(postId).orElseThrow(() -> new ResourceNotFoundException("Post not found: " + postId));
+        log.info("Post found: {}", post);
+        return mapToDto(post);
     }
 }

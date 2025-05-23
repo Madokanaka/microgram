@@ -54,4 +54,15 @@ public class PostController {
             return "posts/create-post";
         }
     }
+
+    @GetMapping("/{id}")
+    public String viewPost(@PathVariable Long id, Model model, @AuthenticationPrincipal User principal) {
+        log.info("Viewing post with id: {}", id);
+        PostDto post = postService.getPostById(id);
+        UserDto user = userService.getUserByName(post.getUsername());
+        model.addAttribute("post", post);
+        model.addAttribute("user", user);
+        model.addAttribute("isAuthenticated", principal != null);
+        return "posts/post";
+    }
 }

@@ -10,4 +10,6 @@ public interface PostService {
 
     @Transactional
     void createPost(String userName, PostDto postDto);
+
+    PostDto getPostById(Long postId);
 }
